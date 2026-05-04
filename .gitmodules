@@ -1,0 +1,18 @@
+[submodule "ggsql"]
+	path = ggsql
+	url = https://github.com/posit-dev/ggsql.git
+[submodule "parquet-format"]
+	path = parquet-format
+	url = https://github.com/apache/parquet-format.git
+[submodule "datapackage"]
+	path = datapackage
+	url = https://github.com/frictionlessdata/datapackage.git
+[submodule "vega-lite"]
+	path = vega-lite
+	url = https://github.com/vega/vega-lite.git
+[submodule "arrow"]
+	path = arrow
+	url = https://github.com/apache/arrow.git
+[submodule "plot"]
+	path = plot
+	url = https://github.com/observablehq/plot.git
