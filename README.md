@@ -60,6 +60,42 @@ because the design space *for visualization specs themselves* is the
 contested one. Vega-Lite (spec-as-JSON), Plot (spec-as-JS-API), and ggsql
 (spec-as-SQL-extension) are three different answers to the same question.
 
+### Pins last refreshed 2026-11-23
+
+Every pin was moved to the latest commit on its upstream default branch.
+
+| Repo | Old → new commit date | Commits | Latest release at new pin |
+|---|---|---|---|
+| arrow | 2026-05-02 → 2026-11-22 | 776 | apache-arrow-26.0.1 (27.0.0 in development) |
+| datapackage | 2026-01-08 → 2026-08-25 | 2 | v2.0 (typo fixes only) |
+| ggsql | 2026-05-01 → 2026-11-19 | 94 | v0.5.2 (now labeled alpha) |
+| parquet-format | 2026-04-20 → 2026-11-22 | 49 | apache-parquet-format-2.14.0 |
+| plot | 2026-04-12 → 2026-11-05 | 15 | v0.6.19 |
+| vega-lite | 2026-04-24 → 2026-11-13 | 67 | v6.5.0 |
+
+What moved, for this study's questions:
+
+- **parquet-format** shipped 2.13.0 and 2.14.0. The spec gained a `FILE`
+  logical type, a `FINITE_VECTOR` logical type with `LIST` storage, a rule
+  for handling unrecognized logical types, IEEE 754 total order and NaN counts
+  for statistics, chronological ordering for INT96 timestamps, and the ALP
+  floating-point encoding (marked as preview, specified in `AlpEncoding.md`).
+  Most changes land in `LogicalTypes.md` and `src/main/thrift/parquet.thrift`.
+- **arrow** released 25.0.x and 26.0.x. The format files under `format/`
+  barely moved: the IPC tensor and sparse-tensor messages are now deprecated
+  (`format/Tensor.fbs`, `format/SparseTensor.fbs`), `IntervalUnit` docs in
+  `format/Schema.fbs` were rewritten, and Flight SQL gained an `is_update`
+  field (`format/FlightSql.proto`).
+- **ggsql** went from v0.3.1 to v0.5.2. It now renders plots directly through
+  seven `hephaestus` writers (`svg`, `pdf`, `png` and others) as well as
+  Vega-Lite, adds an ADBC reader and a dialect registry with more databases,
+  and has an unreleased `TABULATE` clause that renders a query as a table.
+- **vega-lite** 6.5.0 adds an exponential moving average transform and tooltip
+  field filtering; the rest is bug fixes.
+- **plot** 0.6.18 adds a `line` option on the area mark and a `colorSpace`
+  option on the raster mark, and ships an ES bundle with `sideEffects: false`.
+- **datapackage** fixed two typos in its v2 changelog page.
+
 ---
 
 ## In the study now
@@ -142,21 +178,26 @@ contested one. Vega-Lite (spec-as-JSON), Plot (spec-as-JS-API), and ggsql
 - **Maintainer:** Posit (formerly RStudio).
 - **Why this is here:** A bridge reference. ggsql extends SQL with
   `VISUALISE`/`DRAW`/`SCALE`/`LABEL` clauses that express a
-  ggplot2-style grammar of graphics, and compiles down to **Vega-Lite +
-  DuckDB/SQLite**. So in the analytics stack we just drew, ggsql
+  ggplot2-style grammar of graphics. It started out compiling down to
+  **Vega-Lite + DuckDB/SQLite**; since v0.5.0 it also renders plots
+  directly to SVG, PDF and raster images through its `hephaestus`
+  writers, and reads from more databases (ODBC, ADBC, a per-database
+  dialect registry). So in the analytics stack we just drew, ggsql
   composes the query layer with the visualization layer through a single
   spec dialect. Useful for studying how a new spec layer can be designed
   to *inherit* legitimacy from two mature ones (SQL below, Vega-Lite above)
-  rather than competing with them. Currently approaching alpha — pinning
-  the SHA matters here because the surface is still moving.
+  rather than competing with them. The README now calls the current
+  release alpha and "still subject to change" (v0.5.2 at the 2026-11-23
+  pin), so pinning the SHA matters here.
 
 ---
 
 ## Reading order suggestion
 
 1. Start with **Data Package** (`./datapackage`) — read
-   `data/specs/data-package/index.md` (or whichever path the spec lives
-   at after clone) end-to-end. It's the smallest, most readable, and the
+   `content/docs/standard/data-package.mdx` (and its siblings
+   `data-resource.mdx`, `table-schema.mdx`, `table-dialect.mdx`)
+   end-to-end. It's the smallest, most readable, and the
    discipline (RFC 2119 prose ↔ JSON Schema profile) is the cleanest
    example to internalize first.
 2. Read **Vega-Lite**'s schema docs (`./vega-lite/site/docs/`) and look at
